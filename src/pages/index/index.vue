@@ -17,14 +17,62 @@
           <ul class="tabUl">
             <li
               class="names"
-              v-bind:style="{width:itemWidth+'px',height:itemWidth+'px'}"
               v-for="item in classify"
               :key="item.id"
+              :class="item.active"
+              @click="changeTab(item.id)"
+              :style="{background:item.background}"
             >
-              <img :src="item.imgUrl" />
-              <!-- {{item.name}} -->
+              {{item.name}}
+              <!-- <img :src="item.imgUrl" /> -->
             </li>
           </ul>
+          <div class="container">
+            <div v-if="currentTab == 1">
+              <div class="img_item">
+                <div class="imgs">
+                  <img src="/static/images/kehuishouwu-middle.png" alt srcset />
+                </div>
+                <div class="intro">
+                  <p class="title">可回收物</p>
+                  <div>可回收物就是可以再生循环的垃圾。</div>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="currentTab == 2">
+              <div class="img_item">
+                <div class="imgs">
+                  <img src="/static/images/ganlaji-middle.png" alt srcset />
+                </div>
+                <div class="intro">
+                  <p class="title">干垃圾</p>
+                  <div>干垃圾即其它垃圾,指除可回收物、有害垃圾、厨余垃圾(湿垃圾)以外的其它生活废弃物。</div>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="currentTab == 3">
+              <div class="img_item">
+                <div class="imgs">
+                  <img src="/static/images/shilaji-middle.png" alt srcset />
+                </div>
+                <div class="intro">
+                  <p class="title">湿垃圾</p>
+                  <div>湿垃圾又称为厨余垃圾、有机垃圾,即易腐垃圾,指食材废料、剩菜剩饭、中药药渣等易腐的生物质生活废弃物。</div>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div class="img_item">
+                <div class="imgs">
+                  <img src="/static/images/youhailaji-middle.png" alt srcset />
+                </div>
+                <div class="intro">
+                  <p class="title">有害垃圾</p>
+                  <div>有毒有害垃圾是指存有对人体健康有害的重金属、有毒的物质或者对环境造成现实危害或者潜在危害的废弃物</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -37,31 +85,35 @@ export default {
     return {
       searchText: "",
       itemWidth: "",
+      currentTab: 1,
       classify: [
         {
           id: 1,
-          name: "可回收垃圾",
+          name: "可回收物",
           imgUrl: require("../../../static/images/kehuishouwu-middle.png"),
           active: "active",
-          background: ""
+          background: "#215287"
         },
         {
           id: 2,
           name: "干垃圾",
           imgUrl: require("../../../static/images/ganlaji-middle.png"),
-          active: ""
+          active: "",
+          background: "2e2c2a" //
         },
         {
           id: 3,
           name: "湿垃圾",
           imgUrl: require("../../../static/images/shilaji-middle.png"),
-          active: ""
+          active: "",
+          background: "62423a" //
         },
         {
           id: 4,
           name: "有害垃圾",
           imgUrl: require("../../../static/images/youhailaji-middle.png"),
-          active: ""
+          active: "",
+          background: "ea3e30" //
         }
       ]
     };
@@ -78,6 +130,33 @@ export default {
       console.log(windowWidth);
       let itemWidth = windowWidth * 0.9 / 4;
       this.itemWidth = itemWidth;
+    },
+    changeTab(num) {
+      let classify = this.classify;
+      classify.forEach(item => {
+        if (item.id == num) {
+          item.active = "active";
+          switch (num) {
+            case 1:
+              item.background = "#215287";
+              break;
+            case 2:
+              item.background = "#2e2c2a";
+              break;
+            case 3:
+              item.background = "#62423a";
+              break;
+            case 4:
+              item.background = "#ea3e30";
+              break;
+          }
+        } else {
+          item.active = "";
+          item.background = "";
+        }
+      });
+      this.classify = classify;
+      this.currentTab = num;
     }
   },
 
@@ -166,20 +245,60 @@ button::after {
 }
 .tabUl {
   width: 100%;
-  height: 100px;
+  height: 50px;
   display: flex;
-  background: #ffffff;
+  background: #dedede;
 }
 .tabUl li {
+  width: 25%;
   text-align: center;
-  height: 40px;
-  line-height: 40px;
-}
-.tabUl li img {
-  width: 90%;
-  height: 90%;
+  height: 50px;
+  line-height: 50px;
 }
 .tabUl li.active {
-  border-bottom: #000;
+  border-top: 5px solid red;
+  margin-top: -10rpx;
+  color: #ffffff;
+}
+.container {
+  width: 100%;
+  height: 300px;
+}
+.img_item {
+  width: 100%;
+  height: 120px;
+  background: #fff9f9;
+  display: flex;
+}
+.img_item .imgs {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.img_item .imgs img {
+  width: 100%;
+  height: 100%;
+}
+
+.img_item .intro {
+  width: calc(100% - 180rpx);
+  height: 80px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 10px;
+}
+.img_item .intro div {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size:15px;
+  color:#888
+}
+.title{
+  font-size: 30rpx;
 }
 </style>
