@@ -11,6 +11,9 @@
     <div class="other">
       <div class="hot">
         <i class="iconfont">&#xe621;</i>
+        <div>
+          <span v-for="item in showData" :key="item.id">{{item.name}}</span>
+        </div>
       </div>
       <div class="catalog">
         <div class="tabs">
@@ -28,6 +31,17 @@
             </li>
           </ul>
           <div class="container">
+            <div class="img_item">
+              <div class="imgs">
+                <img src="/static/images/kehuishouwu-middle.png" alt srcset />
+              </div>
+              <div class="intro">
+                <p class="title">{{showContent.name}}</p>
+                <div>{{showContent.notes}}</div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="container">
             <div v-if="currentTab == 1">
               <div class="img_item">
                 <div class="imgs">
@@ -72,7 +86,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -86,42 +100,73 @@ export default {
       searchText: "",
       itemWidth: "",
       currentTab: 1,
-      classify: [
-        {
-          id: 1,
-          name: "可回收物",
-          imgUrl: require("../../../static/images/kehuishouwu-middle.png"),
-          active: "active",
-          background: "#215287"
-        },
-        {
-          id: 2,
-          name: "干垃圾",
-          imgUrl: require("../../../static/images/ganlaji-middle.png"),
-          active: "",
-          background: "2e2c2a" //
-        },
-        {
-          id: 3,
-          name: "湿垃圾",
-          imgUrl: require("../../../static/images/shilaji-middle.png"),
-          active: "",
-          background: "62423a" //
-        },
-        {
-          id: 4,
-          name: "有害垃圾",
-          imgUrl: require("../../../static/images/youhailaji-middle.png"),
-          active: "",
-          background: "ea3e30" //
-        }
-      ]
+      showContent:[],
+      // classify: [
+      //   {
+      //     id: 1,
+      //     name: "可回收物",
+      //     imgUrl: require("../../../static/images/kehuishouwu-middle.png"),
+      //     active: "active",
+      //     background: "#215287"
+      //   },
+      //   {
+      //     id: 2,
+      //     name: "干垃圾",
+      //     imgUrl: require("../../../static/images/ganlaji-middle.png"),
+      //     active: "",
+      //     background: "2e2c2a" //
+      //   },
+      //   {
+      //     id: 3,
+      //     name: "湿垃圾",
+      //     imgUrl: require("../../../static/images/shilaji-middle.png"),
+      //     active: "",
+      //     background: "62423a" //
+      //   },
+      //   {
+      //     id: 4,
+      //     name: "有害垃圾",
+      //     imgUrl: require("../../../static/images/youhailaji-middle.png"),
+      //     active: "",
+      //     background: "ea3e30" //
+      //   }
+      // ],
+      showData: [],
+      classify: []
     };
   },
   mounted() {
     this.setSize();
+    this.getHot();
+    this.getClassfiy();
   },
   methods: {
+    getClassfiy() {
+      this.$http
+        .get({
+          url: "/type"
+        })
+        .then(res => {
+          res.forEach(item=>{
+            item.active = ""
+          })
+          res[0].active = "active"
+          res[0].background="#215287"
+          this.classify = res;
+        })
+        .catch(err => {});
+    },
+    getHot() {
+      this.$http
+        .get({
+          url: "/hot"
+        })
+        .then(res => {
+          let showData = res.silce(0, 5);
+          this.showData = res;
+        })
+        .catch(err => {});
+    },
     serach(e) {
       console.log(e, this.searchText);
     },
@@ -132,31 +177,22 @@ export default {
       this.itemWidth = itemWidth;
     },
     changeTab(num) {
-      let classify = this.classify;
-      classify.forEach(item => {
-        if (item.id == num) {
-          item.active = "active";
-          switch (num) {
-            case 1:
-              item.background = "#215287";
-              break;
-            case 2:
-              item.background = "#2e2c2a";
-              break;
-            case 3:
-              item.background = "#62423a";
-              break;
-            case 4:
-              item.background = "#ea3e30";
-              break;
-          }
-        } else {
-          item.active = "";
-          item.background = "";
+      console.log(num);
+      switch(num){
+          
+      }
+      this.$http.get({
+        url:'/type/detail',
+        data:{
+          id:num
         }
-      });
-      this.classify = classify;
-      this.currentTab = num;
+      }).then(res=>{
+        console.log(res);
+        this.showContent = res
+        console.log(this.showContent)
+      }).catch(err=>{
+
+      })
     }
   },
 
@@ -295,10 +331,10 @@ button::after {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  font-size:15px;
-  color:#888
+  font-size: 15px;
+  color: #888;
 }
-.title{
+.title {
   font-size: 30rpx;
 }
 </style>
