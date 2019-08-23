@@ -43,4 +43,9 @@
 		height: 100%;
 		background: #f8f8f8;
 	}
+	.midVerti{
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
 </style>

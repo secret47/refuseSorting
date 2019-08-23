@@ -1,11 +1,14 @@
 {
-  "pages": [
-    "pages/index/main",
-    "pages/logs/main"  ],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "垃圾分类小伙计",
-    "navigationBarTextStyle": "black"
-  }
+	"pages": [
+		"pages/index/main",
+		"pages/detail/main",
+		"pages/search/main",
+		"pages/logs/main"
+	],
+	"window": {
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#fff",
+		"navigationBarTitleText": "垃圾分类小伙计",
+		"navigationBarTextStyle": "black"
+	}
 }
